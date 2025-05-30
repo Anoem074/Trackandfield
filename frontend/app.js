@@ -2445,50 +2445,85 @@ function getTrendIcon(trend) {
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
   // Add login form handler
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    
-    try {
-      const response = await fetch('http://localhost:4000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-      });
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
       
-      if (!response.ok) {
-        throw new Error('Ongeldige gebruikersnaam of wachtwoord');
+      const submitBtn = loginForm.querySelector('button[type="submit"]');
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      
+      // Validate input
+      if (!username || !password) {
+        const loginError = document.getElementById('login-error');
+        loginError.textContent = 'Vul beide velden in';
+        loginError.style.display = 'block';
+        return;
       }
       
-      const data = await response.json();
-      localStorage.setItem('token', data.token);
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.classList.add('loading');
+      submitBtn.textContent = 'Inloggen...';
       
-      // Hide login overlay and show app
-      loginOverlay.style.display = 'none';
-      appDiv.style.display = 'block';
-      
-      // Load initial page
-      showPage('home');
-      
-    } catch (error) {
-      loginError.textContent = error.message;
-      loginError.style.display = 'block';
-    }
-  });
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.msg || 'Ongeldige gebruikersnaam of wachtwoord');
+        }
+        
+        // Store auth data
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        // Hide login overlay and show app
+        const loginOverlay = document.getElementById('login-overlay');
+        const appDiv = document.getElementById('app');
+        loginOverlay.style.display = 'none';
+        appDiv.style.display = 'block';
+        
+        // Load initial page
+        showPage('home');
+        
+      } catch (error) {
+        console.error('Login error:', error);
+        const loginError = document.getElementById('login-error');
+        loginError.textContent = error.message;
+        loginError.style.display = 'block';
+      } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('loading');
+        submitBtn.textContent = 'Login';
+      }
+    });
+  }
   
   // Add logout handler
-  document.getElementById('logout-btn').addEventListener('click', () => {
-    localStorage.removeItem('token');
-    location.reload();
-  });
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      location.reload();
+    });
+  }
   
   // Check if user is logged in
   const token = localStorage.getItem('token');
   if (token) {
+    const loginOverlay = document.getElementById('login-overlay');
+    const appDiv = document.getElementById('app');
     loginOverlay.style.display = 'none';
     appDiv.style.display = 'block';
     showPage('home');

@@ -39,6 +39,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip API requests
+  if (event.request.url.includes('/api/')) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
