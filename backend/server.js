@@ -18,8 +18,14 @@ for (const envVar of requiredEnvVars) {
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// Enhanced CORS configuration for Vercel
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? [/\.vercel\.app$/, /localhost/] 
+    : '*',
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -36,6 +42,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/training', trainingRoutes);
 app.use('/api/user', userRoutes);
 
+// Health check endpoint for Vercel
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -45,5 +56,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); 
+// Vercel serverless function export
+if (process.env.NODE_ENV === 'production') {
+  module.exports = app;
+} else {
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+} 

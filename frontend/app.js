@@ -12,9 +12,9 @@ if ('serviceWorker' in navigator) {
 }
 
 // API URL constant
-const API_URL = window.location.hostname === 'localhost' 
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:4000/api'
-  : '/api';
+  : `${window.location.origin}/api`;
 
 // Import Chart.js date adapter
 const script = document.createElement('script');
@@ -2493,4 +2493,26 @@ document.addEventListener('DOMContentLoaded', () => {
     appDiv.style.display = 'block';
     showPage('home');
   }
+});
+
+// Mobile menu functionality
+document.querySelector('.mobile-menu-toggle').addEventListener('click', () => {
+  document.querySelector('.nav-links').classList.toggle('active');
+});
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e) => {
+  const navLinks = document.querySelector('.nav-links');
+  const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+  
+  if (!navLinks.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+    navLinks.classList.remove('active');
+  }
+});
+
+// Close mobile menu when clicking a nav link
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.remove('active');
+  });
 });

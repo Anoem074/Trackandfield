@@ -1,0 +1,14 @@
+{
+  "name": "trainingapp",
+  "version": "1.0.0",
+  "description": "Training tracking application",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && node server.js",
+    "client": "cd frontend && http-server -p 8080 --cors"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "http-server": "^14.1.1"
+  }
+} 
