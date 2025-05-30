@@ -1,0 +1,14 @@
+{
+  "name": "training-app-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for the training application",
+  "main": "app.js",
+  "scripts": {
+    "start": "serve -s .",
+    "dev": "serve ."
+  },
+  "dependencies": {
+    "serve": "^14.2.1",
+    "chart.js": "^4.4.1"
+  }
+} 

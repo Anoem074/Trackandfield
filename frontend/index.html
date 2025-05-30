@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TrainingApp</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#7c7cff">
+  <meta name="description" content="Your personal training companion">
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Apple Specific Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TrainingApp">
+  
+  <!-- Apple Icons -->
+  <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png">
+  <link rel="apple-touch-icon" sizes="128x128" href="/icons/icon-128x128.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png">
+  
+  <!-- Apple Splash Screens -->
+  <link rel="apple-touch-startup-image" href="/icons/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/icons/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/icons/splash-1242x2208.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/icons/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/icons/splash-1536x2048.png" media="(min-device-width: 768px) and (max-device-width: 1024px)">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div id="login-overlay">
+    <div class="auth-container">
+      <div class="auth-sidebar">
+        <div class="auth-logo">
+          <i class="fas fa-dumbbell"></i>
+          <h1>TrainingApp</h1>
+        </div>
+        <ul class="auth-features">
+          <li>
+            <i class="fas fa-chart-line"></i>
+            <span>Track je voortgang en prestaties</span>
+          </li>
+          <li>
+            <i class="fas fa-calendar-check"></i>
+            <span>Plan en beheer je trainingen</span>
+          </li>
+          <li>
+            <i class="fas fa-trophy"></i>
+            <span>Bereik je persoonlijke doelen</span>
+          </li>
+          <li>
+            <i class="fas fa-heartbeat"></i>
+            <span>Monitor je gezondheid</span>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="auth-main">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login">Inloggen</button>
+          <button class="auth-tab" data-tab="register">Registreren</button>
+        </div>
+
+        <form id="login-form" class="auth-form">
+          <div class="form-group">
+            <label for="username">
+              <i class="fas fa-user"></i>
+              Gebruikersnaam
+            </label>
+            <input 
+              type="text" 
+              id="username" 
+              placeholder="Voer je gebruikersnaam in"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">
+              <i class="fas fa-lock"></i>
+              Wachtwoord
+            </label>
+            <input 
+              type="password" 
+              id="password" 
+              placeholder="Voer je wachtwoord in"
+              required
+            />
+          </div>
+
+          <button type="submit">
+            <i class="fas fa-sign-in-alt"></i>
+            Inloggen
+          </button>
+
+          <div id="login-error" class="auth-error" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <span></span>
+          </div>
+
+          <div class="auth-divider">of log in met</div>
+
+          <div class="auth-social">
+            <button type="button" disabled title="Binnenkort beschikbaar">
+              <i class="fab fa-google"></i>
+              Google
+            </button>
+            <button type="button" disabled title="Binnenkort beschikbaar">
+              <i class="fab fa-apple"></i>
+              Apple
+            </button>
+          </div>
+        </form>
+
+        <form id="register-form" class="auth-form" style="display: none;">
+          <div class="form-group">
+            <label for="reg-username">
+              <i class="fas fa-user"></i>
+              Gebruikersnaam
+            </label>
+            <input 
+              type="text" 
+              id="reg-username" 
+              placeholder="Kies een gebruikersnaam"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="reg-email">
+              <i class="fas fa-envelope"></i>
+              E-mailadres
+            </label>
+            <input 
+              type="email" 
+              id="reg-email" 
+              placeholder="Voer je e-mailadres in"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="reg-password">
+              <i class="fas fa-lock"></i>
+              Wachtwoord
+            </label>
+            <input 
+              type="password" 
+              id="reg-password" 
+              placeholder="Kies een sterk wachtwoord"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="reg-password-confirm">
+              <i class="fas fa-lock"></i>
+              Bevestig wachtwoord
+            </label>
+            <input 
+              type="password" 
+              id="reg-password-confirm" 
+              placeholder="Bevestig je wachtwoord"
+              required
+            />
+          </div>
+
+          <button type="submit" disabled title="Registratie binnenkort beschikbaar">
+            <i class="fas fa-user-plus"></i>
+            Account aanmaken
+          </button>
+
+          <div id="register-error" class="auth-error" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <span></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="app">
+    <nav class="navbar">
+      <div class="nav-logo">TrainingApp</div>
+      <ul class="nav-links">
+        <li class="nav-link" data-page="home">Home</li>
+        <li class="nav-link" data-page="trainingen">Trainingen</li>
+        <li class="nav-link" data-page="scores">Scores</li>
+        <li class="nav-link" data-page="gezondheid">Gezondheid</li>
+        <li class="nav-link" data-page="profiel">Profiel</li>
+        <li class="nav-link" id="logout-btn">Uitloggen</li>
+      </ul>
+    </nav>
+    <main>
+      <section id="page-home" class="page-section"></section>
+      <section id="page-trainingen" class="page-section" style="display:none;"></section>
+      <section id="page-scores" class="page-section" style="display:none;"></section>
+      <section id="page-gezondheid" class="page-section" style="display:none;"></section>
+      <section id="page-profiel" class="page-section" style="display:none;"></section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html> 
